@@ -49,7 +49,12 @@ FROM
     LEFT JOIN supervisors s on u.[user_id] = s.target_value
 WHERE 
     u.[status] = 'n'
+    AND u.[user_id] NOT IN ('BUDHOLD')
     AND r.role_id NOT IN ('','SALESPERSON', 'SALESMANAGER', 'PERSONAL','PM TSD')
+    AND r.role_id NOT LIKE 'DC-%'
+    AND r.role_id NOT LIKE 'SUP-%'
+    AND r.role_id NOT LIKE 'REQ[0-9]%'
+    AND r.role_id NOT LIKE 'REP-7%'
 GROUP BY
     u.[user_id]
     ,u.[description]
