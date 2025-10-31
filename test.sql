@@ -1,1 +1,0 @@
-select * from agltransact where period = '202507'
