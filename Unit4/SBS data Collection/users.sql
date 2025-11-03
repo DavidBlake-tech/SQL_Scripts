@@ -1,7 +1,7 @@
 SET NOCOUNT ON;
 PRINT 'We only store supervisors for approvers, this is for the purpose of task escalation only, we do not store the organisational hierarchy in Unit4, that is controlled by Workforce Information Team';
-PRINT 'We don''t store start date in Unit4, as Unit4 is not used for personel management'
-PRINT 'We don''t maintain job titles in Unit4'
+PRINT 'We don''t store start date in Unit4, as Unit4 is not used for personel management';
+PRINT 'We don''t maintain job titles in Unit4';
 PRINT 'Unit4 doesn''t have the concept of default locations, locations are tied to cost centres for purposes of delivery addresses';
 
 
@@ -39,9 +39,22 @@ SELECT
     ,'Not kept in Unit4' AS 'Start_Date'
     ,a.e_mail AS 'Email Address'
     ,s.supervisor AS 'Supervisors Full Name'
+    ,STRING_AGG(CAST(r.role_id AS VARCHAR(MAX)), ' , ') AS role_id
     ,'Not kept in Unit4' AS 'User Job Title'
     ,'Unit4 doesnt have default locations tied to users' AS 'Default Location'
-    ,STRING_AGG(CAST(r.role_id AS VARCHAR(MAX)), ' , ') AS role_id
+    ,   CASE 
+            WHEN MAX(CASE WHEN r.role_id = 'DFCE' THEN 1 ELSE 0 END) = 1 THEN '> £100k'
+            WHEN MAX(CASE WHEN r.role_id = '10K Approver' THEN 1 ELSE 0 END) = 1 THEN 'up to £100k'
+            WHEN MAX(case when r.role_id = 'APPROVER'THEN 1 ELSE 0 END) = 1 THEN 'Up to £10k' 
+            ELSE 'Not Approver' 
+        END AS 'Invoice Limit'
+    , '' AS 'Sales Order Limit'
+    , '' AS 'Credit Memo Limit'
+    , '' AS 'General Ledger Limit'
+    , '' AS 'Approve Blanket Purchase Agreements'
+    , '' AS 'Approve Standard Purchase Orders'
+    , '' AS 'Approve Blanket Releases'
+    , '' AS 'Approve Contract Purchase Orders'
 FROM 
     aaguser u
     LEFT JOIN aaguserdetail r ON u.[user_id] = r.[user_id]
@@ -55,6 +68,7 @@ WHERE
     AND r.role_id NOT LIKE 'SUP-%'
     AND r.role_id NOT LIKE 'REQ[0-9]%'
     AND r.role_id NOT LIKE 'REP-7%'
+    AND r.role_id NOT LIKE 'PM %'
 GROUP BY
     u.[user_id]
     ,u.[description]
