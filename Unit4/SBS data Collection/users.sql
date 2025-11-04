@@ -48,8 +48,14 @@ SELECT
             WHEN MAX(case when r.role_id = 'APPROVER'THEN 1 ELSE 0 END) = 1 THEN 'Up to £10k' 
             ELSE 'Not Approver' 
         END AS 'Invoice Limit'
-    , '' AS 'Sales Order Limit'
-    , '' AS 'Credit Memo Limit'
+    ,   CASE
+            WHEN MAX(CASE WHEN r.role_id IN ('AR CLERK','AR_CLERK SUP','SO SIMPLE','SO INTERMEDI','SO FREE TXT') THEN 1 ELSE 0 END) = 1 THEN 'UNLIMITED'
+            ELSE '' 
+        END AS 'Sales Order Limit'
+    ,   CASE
+            WHEN MAX(CASE WHEN r.role_id IN ('AR CLERK','AR_CLERK SUP','SO SIMPLE','SO INTERMEDI','SO FREE TXT') THEN 1 ELSE 0 END) = 1 THEN 'UNLIMITED'
+            ELSE '' 
+        END AS 'Credit Memo Limit'
     , '' AS 'General Ledger Limit'
     , '' AS 'Approve Blanket Purchase Agreements'
     , '' AS 'Approve Standard Purchase Orders'
