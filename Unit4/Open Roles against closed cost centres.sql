@@ -21,7 +21,7 @@ FROM aagrole AS r
                 ELSE ''
             END
     AND dv.attribute_id = 'c1'
-    LEFT JOIN aaguserdetail ud ON r.role_id = ud.role_id and ud.[user_id] = 'system'
+    LEFT JOIN aaguserdetail ud ON r.role_id = ud.role_id --and ud.[user_id] = 'system'
 
 WHERE 
     r.status = 'n'
