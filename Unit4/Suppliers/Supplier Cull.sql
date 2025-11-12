@@ -3,7 +3,7 @@ Variable to set the date cuttoff for a supplier cull
 */
 
 DECLARE @DateCutoff DATE;
-SET @DateCutoff = DATEADD(year,-4, GETDATE());
+SET @DateCutoff = DATEADD(month,-18, GETDATE());
 
 -----------------------------------------------------------------------------------------
 /*
