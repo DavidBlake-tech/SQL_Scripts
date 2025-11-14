@@ -1,7 +1,7 @@
 SELECT 
     r.role_id,
     r.description,
-    r.status AS 'CC Status',
+    r.status AS 'Role Status',
     CASE
         WHEN r.role_id LIKE 'sup-%' THEN SUBSTRING(r.role_id, 5, LEN(r.role_id) - 4)
         WHEN r.role_id LIKE 'dc-7-%' THEN SUBSTRING(r.role_id, 6, LEN(r.role_id) - 5)
@@ -9,7 +9,7 @@ SELECT
         ELSE ''
     END AS [Cost Centre],
     dv.description AS [Cost Centre Name]
-	,dv.status AS 'Role Status'
+	,dv.status AS 'CC Status'
     ,ud.[user_id]
 FROM aagrole AS r
     LEFT JOIN agldimvalue AS dv 
